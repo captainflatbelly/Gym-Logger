@@ -1,28 +1,82 @@
 import React from 'react';
-import { Calendar,theme } from 'antd';
+import { Calendar, theme } from 'antd';
+import growth from '../assets/undraw_growth_chart_r99m.svg';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+const themeMUI = createTheme();
 
-const onPanelChange = (value, mode) => {
-    console.log(value.format('YYYY-MM-DD'), mode);
-  };
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  lineHeight: '60px',
+  elevation: 6,
+}));
+
 export const WorkoutHistory = () => {
-    
-    const { token } = theme.useToken();
-  const wrapperStyle = {
-    width: 600,
-    //height: 700,
-    border: `1px solid ${token.colorBorderSecondary}`,
-    borderRadius: token.borderRadiusLG
+  const { token } = theme.useToken();
 
+  const wrapperStyle = {
+    maxWidth: '100%', // Full width to allow responsive design
+    maxHeight: '400px', // Reduce the maximum height of the box
+    border: `1px solid ${token.colorBorderSecondary}`,
+    borderRadius: token.borderRadiusLG,
+    overflow: 'auto', // Allow vertical scrolling if content exceeds maxHeight
+    transform: 'scale(0.9)', // Scale down the content
   };
+
+  const highlightedDates = {
+    '2024-05-10': 'bg-green-200',
+    '2024-05-15': 'bg-green-200'
+    // Add more dates as needed
+  };
+
+  const dateCellRender = (value) => {
+    const dateKey = value.format('YYYY-MM-DD');
+    const tailwindClass = highlightedDates[dateKey];
+    
+    return (
+      <div className={`ant-picker-cell-inner ${tailwindClass ? tailwindClass : ''} mx-auto my-[-60%] p-6`}>
+        
+      </div>
+    );
+  };
+
+  const onPanelChange = (value, mode) => {
+    console.log(value, mode);
+  };
+
   return (
-    
-        <div style={wrapperStyle}>
-      <Calendar fullscreen={false} onPanelChange={onPanelChange} />
-    </div>
-    
-    
+    <ThemeProvider theme={themeMUI}>
+      <Box className='w-5/6 h-64' borderRadius={16}>
+        <Item elevation={6} style={{ padding: '20px', transform: 'scale(0.95)' }}>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={8}>
+              <Box style={wrapperStyle}  >
+                <Calendar
+                  fullscreen={true}
+                  onPanelChange={onPanelChange}
+                  dateCellRender={dateCellRender}
+                  
+                />
+              </Box>
+            </Grid>
+             
+                <Grid item xs={12} md={4} columns={2}>
+                    <img src={growth} alt="Growth Chart" style={{ width: '100%', height: 'auto' }} className='drop-shadow-2xl'/>
+                    <h1 className='font-bold font-roboto-light text-4xl drop-shadow-xl p-8 pl-8  mx-[-4%] font-family'>PROGRESS</h1>
+                </Grid>
+                
+        
+          </Grid>
+        </Item>
+      </Box>
+    </ThemeProvider>
   );
-  };
+};
 
 export const HomeContent = () => {
   return (
@@ -61,5 +115,3 @@ export const HomeContent = () => {
     </div>
   );
 };
-
-
