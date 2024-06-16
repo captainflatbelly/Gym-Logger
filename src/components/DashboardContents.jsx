@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+import { useEffect,useState } from 'react';
 import { Calendar, theme } from 'antd';
 import growth from '../assets/undraw_growth_chart_r99m.svg';
 import Grid from '@mui/material/Grid';
@@ -15,6 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
   lineHeight: '60px',
   elevation: 6,
 }));
+
 
 export const WorkoutHistory = () => {
   const { token } = theme.useToken();
@@ -33,6 +36,10 @@ export const WorkoutHistory = () => {
     '2024-05-15': 'bg-green-200'
     // Add more dates as needed
   };
+  // const highlightedDates = datesArray.reduce((acc, date) => {
+  //   acc[date] = 'bg-green-200';
+  //   return acc;
+  // }, {});
 
   const dateCellRender = (value) => {
     const dateKey = value.format('YYYY-MM-DD');

@@ -82,7 +82,7 @@ const Dashboard = () => {
       case '3':
         return <div className="text-white">Friends Content</div>;
       case '4':
-        return <div className="text-white"><WorkoutHistory /></div>;
+        return <div className="text-white"> <WorkoutHistory /> </div>;
       case '5':
         return <div className="text-white">Settings Content</div>;
       case '6':
