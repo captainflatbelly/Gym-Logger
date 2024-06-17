@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactTyped } from 'react-typed';
 import { NavLink } from 'react-router-dom';
-
+import {toast} from 'sonner';
 const Hero = () => {
   return (
     <div className='text-white'>
@@ -20,6 +20,9 @@ const Hero = () => {
         </div>
         <NavLink to='/signup'>
           <button className='bg-[#00df9a] w-[200px] hover:scale-105 duration-1000 mt-4 py-3 font-medium my-6 text-black rounded-md'>Get Started</button>
+        </NavLink>
+        <NavLink to='/login'>
+          <button className='bg-[#00df9a] w-[200px] hover:scale-105 duration-1000 mt-4 py-3 font-medium my-6 text-black rounded-md'>Login</button>
         </NavLink>
       </div>
     </div>

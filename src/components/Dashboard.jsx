@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { WorkoutHistory, HomeContent } from './DashboardContents';
+import React, { useState , useContext} from 'react';
+import { WorkoutHistory, HomeContent, LogoutContent } from './DashboardContents';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -11,11 +11,24 @@ import {
 import { LiaUserFriendsSolid } from 'react-icons/lia';
 import { CgGym } from 'react-icons/cg';
 import { Button, Layout, Menu, ConfigProvider, Calendar } from 'antd';
-
+import { AuthContext } from '../context/AuthContext';
+import {toast} from 'sonner';
 const { Header, Sider, Content } = Layout;
 
 const SideMenu = ({ onSelectMenuItem }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const { logout } = useContext(AuthContext);
+
+  const handleMenuClick = (key) => {
+    if (key === '6') {
+      toast.success('Logout Successful')
+      setTimeout(() => {
+        logout();
+      }, 1000);
+    } else {
+      onSelectMenuItem(key);
+    }
+  };
 
   return (
     <Sider trigger={null} collapsible collapsed={collapsed} style={{ background: '#000300' }}>
@@ -31,7 +44,7 @@ const SideMenu = ({ onSelectMenuItem }) => {
         theme="dark"
         mode="inline"
         defaultSelectedKeys={['1']}
-        onSelect={({ key }) => onSelectMenuItem(key)}
+        onSelect={({ key }) => handleMenuClick(key)}
         style={{ background: '#000300' }}
         items={[
           {
@@ -62,7 +75,8 @@ const SideMenu = ({ onSelectMenuItem }) => {
           {
             key: '6',
             icon: <LogoutOutlined />,
-            label: 'Logout',
+            label: 'Logout'
+            ,
           },
         ]}
       />
@@ -72,7 +86,7 @@ const SideMenu = ({ onSelectMenuItem }) => {
 
 const Dashboard = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState('1');
-
+  const { logout } = useContext(AuthContext);
   const renderContent = () => {
     switch (selectedMenuItem) {
       case '1':
@@ -85,8 +99,7 @@ const Dashboard = () => {
         return <div className="text-white"> <WorkoutHistory /> </div>;
       case '5':
         return <div className="text-white">Settings Content</div>;
-      case '6':
-        return <div className="text-white">Logout Content</div>;
+      
       default:
         return <div className="text-white"><HomeContent /></div>;
     }

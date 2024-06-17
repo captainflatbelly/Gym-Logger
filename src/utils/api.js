@@ -22,24 +22,24 @@ export const loginUser = async (email,password) => {
             password: password
         });
         console.log(response);
-        return response.data;
+        return response;
     }
     catch (error) {
         console.log(error);
     }
 }
 
-export const registerUser = async (firstName,lastName,email,password) => {
+export const registerUser = async (data) => {
 
     try {
        
         const response = await axios.post(`${BASE_URL}auth/register`, {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            password: data.password
         });
-        return response.data;
+        return response;
     }
     catch (error) {
         

@@ -2,8 +2,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { deleteCookie } from '../utils/cookieUtils'; // Adjust to your utility functions
 import { authVerify } from '../utils/api';
-
+import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
+
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       try {
         console.log('Checking authentication...');
 
-        const response = await authVerify();
+        const response = await authVerify(); // Verify authentication status
         console.log('Response from authVerify:', response.valid);
 
         if (response.valid === true) {
@@ -38,8 +39,15 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  const logout = () => {
+    setIsAuthenticated(false); // Set authentication state to false
+    deleteCookie('accessToken'); // Clear token from cookies or localStorage
+
+    // Perform any other cleanup as necessary
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -122,3 +122,15 @@ export const HomeContent = () => {
     </div>
   );
 };
+
+export const LogoutContent = () => {  
+  
+  return (
+    <div className="logout-content">
+      <section className="logout-section p-4">
+        <h2 className="text-2xl font-bold text-[#00df98] mb-4">You have been logged out!</h2>
+        <p className="text-white">Thank you for using Gym Logger. We hope to see you again soon!</p>
+      </section>
+    </div>
+  );
+}
