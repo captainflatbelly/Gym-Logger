@@ -47,3 +47,12 @@ export const registerUser = async (data) => {
     }
 }
 
+export const userLogout = async() => {
+    try {
+        const response = await axios.post(`${BASE_URL}auth/logout`);
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}

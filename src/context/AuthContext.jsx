@@ -1,7 +1,7 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import { deleteCookie } from '../utils/cookieUtils'; // Adjust to your utility functions
-import { authVerify } from '../utils/api';
+import { authVerify , userLogout} from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
 
@@ -41,8 +41,9 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setIsAuthenticated(false); // Set authentication state to false
-    deleteCookie('accessToken'); // Clear token from cookies or localStorage
-
+    //deleteCookie('accessToken'); // Clear token from cookies or localStorage
+    const response = userLogout();
+    console.log('Logout response:', response);
     // Perform any other cleanup as necessary
   };
 
