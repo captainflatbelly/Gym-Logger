@@ -3,6 +3,7 @@ import { registerUser } from '../utils/api';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'sonner'
+import Navbar from './LandingPageComponents/Navbar';
 const SignupForm = () => {
     const { setIsAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
@@ -109,7 +110,11 @@ const SignupForm = () => {
     };
   
     return (
+      <div>
+        <Navbar />
+
       <div className="min-h-screen flex items-center justify-center text-white">
+        
         <div className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md">
           <h1 className="text-3xl font-bold mb-6">Sign Up</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -189,6 +194,8 @@ const SignupForm = () => {
             </button>
           </form>
         </div>
+      </div>
+    
       </div>
     );
 }

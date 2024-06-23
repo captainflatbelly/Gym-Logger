@@ -3,16 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner'; // Import Toaster
 import { AuthProvider } from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Feature1 from './components/Feature1';
-import Feature2 from './components/Feature2';
-import Feature3 from './components/Feature3';
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Signup from './components/Signup2';
 import Dashboard from './components/Dashboard'; // Adjust path if necessary
 import ErrorBoundary from './components/ErrorBoundary';
-
+import WorkoutDetail from './components/WorkoutDetail';
 const App = () => {
   return (
     <AuthProvider>
@@ -21,11 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={
             <div>
-              <Navbar/>
-              <Hero/>
-              <Feature1/>
-              <Feature2/>
-              <Feature3/>
+              <LandingPage />
             </div>
           } />
           <Route path="/signup" element={<Signup />} />
@@ -38,6 +30,11 @@ const App = () => {
               </PrivateRoute>
             }
           />
+           <Route path="/workout/:date" element={
+            <PrivateRoute>
+              <WorkoutDetail />
+            </PrivateRoute>
+           } />
           <Route path="/*" element={<ErrorBoundary />} /> {/* Handle other routes or errors */}
         </Routes>
       </Router>

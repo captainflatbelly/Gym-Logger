@@ -1,5 +1,5 @@
 import React from 'react'
-import fitness from '../assets/undraw_fitness_tracker_3033-2.svg'
+import fitness from '../../assets/undraw_fitness_tracker_3033-2.svg'
 const Analytics = () => {
   return (
     <div className='w-full bg-white '>

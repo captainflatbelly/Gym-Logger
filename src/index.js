@@ -31,6 +31,7 @@ root.render(
   <React.StrictMode>
     {/* <RouterProvider router={router} /> */}
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
+
 );
 

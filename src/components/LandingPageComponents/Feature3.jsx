@@ -1,6 +1,6 @@
 import React from 'react'
-import fitness1 from '../assets/undraw_indoor_bike_pwa4.svg'
-import fitness2 from '../assets/undraw_personal_training_0dqn.svg'
+import fitness1 from '../../assets/undraw_indoor_bike_pwa4.svg'
+import fitness2 from '../../assets/undraw_personal_training_0dqn.svg'
 const Feature3 = () => {
   return (
     <div className='w-full bg-white'>

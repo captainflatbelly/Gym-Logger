@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { loginUser } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
+import Navbar from './LandingPageComponents/Navbar';
 import { Toaster, toast } from 'sonner';
 
 const LoginForm = () => {
@@ -44,7 +44,7 @@ const LoginForm = () => {
           setIsAuthenticated(true);
           // Show success toast and redirect after delay
           toast.success('Login Successful! Redirecting to Dashboard...', {
-            
+            duration: 2000,
             richColors: false,
             style: {
               backgroundColor: '#4B5563',
@@ -112,7 +112,7 @@ const LoginForm = () => {
       <Navbar />
       <Toaster /> {/* Add Toaster component here to render toasts */}
       <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+        <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md md:max-w-lg">
           <h1 className="text-3xl font-bold mb-6">Login</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

@@ -11,7 +11,7 @@ const theme = createTheme({
         day: {
           // Override the day styles here
           '&.Mui-selected': {
-            backgroundColor: '#00df9a', // Color for selected date
+            backgroundColor: '#00df98', // Color for selected date
             color: '#fff', // Text color for selected date
             '&:hover': {
               backgroundColor: '#00bf8a', // Color for selected date on hover
@@ -23,7 +23,7 @@ const theme = createTheme({
         },
         today: {
           // Styles for today's date
-          borderColor: '#00df9a', // Border color for today
+          borderColor: '#00df98', // Border color for today
         },
       },
     },

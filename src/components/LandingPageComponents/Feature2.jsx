@@ -1,5 +1,5 @@
 import React from 'react'
-import fitness from '../assets/undraw_fitness_stats_sht6-2.svg'
+import fitness from '../../assets/undraw_fitness_stats_sht6-2.svg'
 const Feature2 = () => {
   return (
     <div><div className='w-full bg-slate'>

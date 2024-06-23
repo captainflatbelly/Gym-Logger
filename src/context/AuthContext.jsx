@@ -1,6 +1,4 @@
-// src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
-import { deleteCookie } from '../utils/cookieUtils'; // Adjust to your utility functions
 import { authVerify , userLogout} from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 export const AuthContext = createContext();
@@ -28,7 +26,6 @@ export const AuthProvider = ({ children }) => {
       } catch (err) {
         console.log('Error occurred during auth verification:', err);
         setIsAuthenticated(false); // Token expired or invalid
-        deleteCookie('accessToken'); // Clear invalid token
         console.error('Auth check failed:', err);
       } finally {
         console.log('Setting loading to false');
