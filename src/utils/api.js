@@ -138,3 +138,14 @@ export const fetchWorkoutByDate = async(date) => {
         console.log(error);
     }
 }
+
+export const fetchWorkoutById = async(id) => {
+    try {
+        const response = await axios.get(`${BASE_URL}workout/getWorkoutById/${id}`);
+        console.log(response.data);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}

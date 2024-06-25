@@ -76,7 +76,7 @@ const WorkoutDetail = () => {
       maxWidth: '1240px',
       color: 'white'
     }}>
-  <h1 className='w-full text-3xl font-bold text-[#00df98] m-4'>POTENTIA.</h1>
+        <h1 className='w-full text-3xl font-bold text-[#00df98] m-4'>POTENTIA.</h1>
         <h2 className='w-full text-3xl font-bold text-[#ffffff] m-4'>Workout Details for </h2>
         <p className='w-full text-3xl font-bold text-[#00df98] m-4 pb-10'>{date}</p>
       </Box>

@@ -9,6 +9,7 @@ import Signup from './components/Signup2';
 import Dashboard from './components/Dashboard'; // Adjust path if necessary
 import ErrorBoundary from './components/ErrorBoundary';
 import WorkoutDetail from './components/WorkoutDetail';
+import ExerciseInventory from './components/ExerciseInventory';
 const App = () => {
   return (
     <AuthProvider>
@@ -33,6 +34,11 @@ const App = () => {
            <Route path="/workout/:date" element={
             <PrivateRoute>
               <WorkoutDetail />
+            </PrivateRoute>
+           } />
+           <Route path="/workout/:date/:id" element={
+            <PrivateRoute>
+              <ExerciseInventory />
             </PrivateRoute>
            } />
           <Route path="/*" element={<ErrorBoundary />} /> {/* Handle other routes or errors */}
