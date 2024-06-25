@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -8,8 +8,10 @@ import { fetchWorkoutByDate } from '../utils/api';
 import Navbar from './LandingPageComponents/Navbar';
 import Paper from '@mui/material/Paper';
 import { ExerciseCard } from './DashboardComponents/Card2';
+import { ButtonBase } from '@mui/material';
 
 const WorkoutDetail = () => {
+  const navigate = useNavigate();
   let { date } = useParams();
   const [workouts, setWorkouts] = useState([]); // Initialize state for workouts
   const [loading, setLoading] = useState(true);
@@ -81,29 +83,42 @@ const WorkoutDetail = () => {
       {!workouts.data ? (
       <Typography variant="body1" color={"#00df98"}>No workouts found for this date.</Typography>
       ) : (
-      <Box sx={{color: '#00df98' ,width: '400px', marginBottom: 4}}>
-      {workouts && workouts.data && workouts.data.map((workout, index) => (
-        <Paper key={workout.id} sx={{ padding: 2, marginBottom: 2,backgroundColor: '#00df98' }}>
-          <Typography color="white" variant="h5" component="h2">Workout {index+1}</Typography>
-          <Typography color="white">Status: {workout.status}</Typography>
-          <Typography color="white">Created: {new Date(workout.created).toLocaleString()}</Typography>
-          {workout.workoutExercises.map((exercise) => (
-            <Box key={exercise.id} sx={{ marginLeft: 4, marginTop: 2 }}>
-              
-              <ExerciseCard
-
-                name={exercise.name}
-                sets={exercise.sets}
-                reps={exercise.reps}
-                weight={exercise.weight}
-                status={exercise.status}
-              ></ExerciseCard>
-            </Box>
-          ))}
-        </Paper>
-      ))}
-       <Box sx={{ height: '100px' }} />
+      
+        <Box sx={{ color: '#00df98', width: '400px', marginBottom: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        {workouts && workouts.data && workouts.data.map((workout, index) => (
+          <ButtonBase
+            key={workout.id}
+            onClick={() => navigate(`/workout/${date}/${workout.id}`)}
+            sx={{ color: '#00df98', marginBottom: 4, width: '100%' }}
+          >
+            <Paper sx={{ padding: 2, marginBottom: 2, backgroundColor: '#00df98', width: '100%' }}>
+              <Grid container spacing={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Grid item sx={{ width: '100%' }}>
+                  <Typography color="white" variant="h5" component="h2">Workout {index + 1}</Typography>
+                  <Typography color="white">Status: {workout.status}</Typography>
+                  <Typography color="white">Created: {new Date(workout.created).toLocaleString()}</Typography>
+                </Grid>
+                {workout.workoutExercises.map((exercise) => (
+                  <Grid item key={exercise.id} sx={{ width: '100%' }}>
+                    <Box sx={{ marginLeft: 4, marginTop: 2 }}>
+                      <ExerciseCard
+                        name={exercise.name}
+                        sets={exercise.sets}
+                        reps={exercise.reps}
+                        weight={exercise.weight}
+                        status={exercise.status}
+                      />
+                    </Box>
+                  </Grid>
+                ))}
+                 <Box sx={{ height: '40px' }} />
+              </Grid>
+            </Paper>
+          </ButtonBase>
+        ))}
+       
       </Box>
+      
       )}
       
     </Grid>
