@@ -149,3 +149,28 @@ export const fetchWorkoutById = async(id) => {
         console.log(error);
     }
 }
+
+export const modifyExerciseStatus = async(data) => {
+    try{
+        console.log(data)
+        const response = await axios.patch(`${BASE_URL}workout/modifyExerciseStatus/${data.workoutId}/${data.exerciseId}`, {
+            status: data.s
+        });
+        console.log("modified exercise: ", response);
+
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export const exerciseStatus = async(data) => {
+    try {
+        const response = await axios.get(`${BASE_URL}workout/getExerciseStatus/${data.workoutId}/${data.exerciseId}`);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}

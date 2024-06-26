@@ -40,6 +40,7 @@ const ExerciseInventory = () => {
     // Implement logic to mark set complete, update state, or send API request
   };
 
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -108,6 +109,8 @@ const ExerciseInventory = () => {
                   weight={exercise.weight}
                   status={exercise.status}
                   onMarkSetComplete={(setId) => handleMarkSetComplete(exercise.id, setId)}
+                    workoutId={workout.id}
+                    exerciseId={exercise.id}
                 />
                 </Paper>
               </Grid>
