@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import {toast} from 'sonner';
 const Hero = () => {
   return (
-    <div className='text-white'>
+    <div className='text-white pb-10' >
       <div className='max-w-[800px] mt-[-96px] w-full h-screen mx-auto text-center flex flex-col justify-center items-center'>
         <p className='text-[#00df9a] font-bold p-2'>REAL TIME WORKOUT TRACKER</p>
         <h1 className='md:text-7xl sm:text-6xl text-4xl font-bold md:py-6'>Keep Up.</h1>
