@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 import { useState } from 'react';
-const BASE_URL = 'http://localhost:8000/api/v1/';
+const BASE_URL = 'https://gymloggerbackend.onrender.com/api/v1/';
 
 axios.defaults.withCredentials = true;
 
