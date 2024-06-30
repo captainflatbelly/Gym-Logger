@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
-
+import { toast } from 'sonner';
 import { useState } from 'react';
-const BASE_URL = 'https://gymloggerbackend.onrender.com/api/v1/';
+const BASE_URL = 'http://localhost:8000/api/v1/';
+const deployed = 'https://gymloggerbackend.onrender.com/api/v1/';
 
 axios.defaults.withCredentials = true;
 
@@ -169,6 +170,106 @@ export const exerciseStatus = async(data) => {
     try {
         const response = await axios.get(`${BASE_URL}workout/getExerciseStatus/${data.workoutId}/${data.exerciseId}`);
         return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export async function fetchFriends()
+{
+    try {
+        const response = await axios.get(`${BASE_URL}friendships/getFriendships`);
+        console.log(response.data);
+        return response.data;
+    }
+    catch (error) {
+        
+        console.log(error);
+        return error
+    }
+}
+
+export async function deleteFriend(data)
+{
+    try {
+        console.log("data.id: ", data.id)
+        const response = await axios.delete(`${BASE_URL}friendships/deleteFriendship/`, {
+            data: { friendId: data.id }
+        });
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export async function sendFriendRequest(data)
+{
+    try {
+        console.log("data.email: ", data.email)
+        const response = await axios.post(`${BASE_URL}friendships/sendRequest`, {
+            friendEmail: data.email
+        });
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+        if (error.response && error.response.data && error.response.data.error) {
+            toast.error(`Error: ${error.response.data.error}`);
+        }
+        else
+        {
+            toast.error('Unknown error occurred');
+        }
+    }
+}
+
+export async function fetchIncomingRequests()
+{
+    try {
+        const response = await axios.get(`${BASE_URL}friendships/incomingRequests`);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export async function fetchOutgoingRequests()
+{
+    try {
+        const response = await axios.get(`${BASE_URL}friendships/outgoingRequests`);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export async function acceptFriendRequest(data)
+{
+    try {
+        console.log("data.id: ", data.id)
+        const response = await axios.patch(`${BASE_URL}friendships/acceptDeclineRequest`, {
+            requestId: data.id,
+            accept: true
+        });
+        return response;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
+export async function declineFriendRequest(data)
+{
+    try {
+        const response = await axios.patch(`${BASE_URL}friendships/acceptDeclineRequest`, {
+            requestId: data.id,
+            accept: false
+        });
+        return response;
     }
     catch (error) {
         console.log(error);

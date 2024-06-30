@@ -4,7 +4,7 @@ import { deleteCookie } from './cookieUtils'; // Utility function to delete cook
 
 const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
-  withCredentials: true, // Ensure cookies are sent with requests
+  withCredentials: true, 
 });
 
 axiosInstance.interceptors.response.use(
