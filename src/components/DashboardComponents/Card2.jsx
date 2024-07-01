@@ -3,11 +3,8 @@ import { useState, useEffect } from 'react';
 import { Box, Typography, Paper, Button, Card,Grid, CardContent } from '@mui/material';
 import {modifyExerciseStatus, exerciseStatus} from '../../utils/api';
 import { toast } from 'sonner';
-import io from 'socket.io-client';
-
-const gymId = "1234gym"
-const socket = io.connect('http://localhost:4000'); // Replace with your backend URL
-
+import { completeSet } from '../../utils/socket';
+import { useSelector } from 'react-redux';
 export const CalorieCard = ({ title, amount, description }) => {
   return (
     <Box sx={{ minWidth: 275, maxWidth: 300, transform: 'scale(1)' }}>
@@ -27,8 +24,6 @@ export const CalorieCard = ({ title, amount, description }) => {
     </Box>
   );
 }
-
-
 
 export const ExerciseCard = ({ name, sets, reps, weight, status }) => {
   return (
@@ -55,55 +50,40 @@ export const ExerciseCard = ({ name, sets, reps, weight, status }) => {
       </Card>
     </Box>
   );
-};
+}
 
-
-export const ExerciseDetailsCard = ({ name, sets, reps, weight, status, onMarkSetComplete, workoutId, exerciseId}) => {
+export const ExerciseDetailsCard = ({ name, sets, reps, weight, status, onMarkSetComplete, workoutId, exerciseId, ExerciseName}) => {
   const [completedCount, setCompletedCount] = useState(0);
+  const gymName = useSelector((state) => state.gym.gymName);
+  const userId = useSelector((state) => state.gym.userId);
 
-
-  useEffect(() => {
-    // Join gym room
-    socket.emit('joinGym', gymId);
-
-    // Listener for setCompleted event
-    socket.on('setCompleted', ({ userName: receivedUserName, exerciseName: receivedExerciseName }) => {
-      //if (receivedWorkoutId === workoutId && receivedExerciseId === exerciseId) {
-        // Handle notification logic here, e.g., showing a notification
-        console.log(`Exercise ${receivedExerciseName} completed by ${receivedUserName}`);
-        toast.success(`Exercise ${receivedExerciseName} completed by ${receivedUserName}`);
-    });
-
-    return () => {
-      socket.off('setCompleted');
-    };
-  }, [completedCount]);
-
-
-  const handleMarkSetComplete = () => {
+  const handleMarkSetComplete = async(e) => {
+    e.preventDefault()
     const nextCompletedCount = completedCount + 1;
     setCompletedCount(nextCompletedCount);
-    socket.emit('setCompleted', { gymId,name, name });
+    console.log("gyname", gymName)
+    //socket.emit('setCompleted', { gymId,name, name });
+  
+    completeSet(gymName, userId, ExerciseName)
    if(nextCompletedCount === sets)
    {
       const s = 'completed';
       const response = modifyExerciseStatus({s, workoutId, exerciseId});
    }
   };
-
   const exerciseCompleted = async ({workoutId, exerciseId}) => {
-    const status = await exerciseStatus(workoutId,exerciseId);
+   // console.log("workout: ",workoutId)
+   // console.log("exercise: ",exerciseId)
+    const status = await exerciseStatus({workoutId,exerciseId});
     return status==="completed";
   }
-
   return (
     <Box sx={{ marginBottom: 1, minWidth: 275, maxWidth: 600, transform: 'scale(1)' }}>
       <Card variant="outlined" sx={{ backgroundColor: '#e2e7ec', display:'flex', flexDirection: 'column' }}>
         <CardContent >
         <Grid sx={{ pb:4}}>
-          {console.log(completedCount,sets, exerciseCompleted(workoutId,exerciseId))}
-          
-          {sets === completedCount || exerciseCompleted(workoutId,exerciseId) ? (
+          {console.log("count, sets", completedCount, sets)}
+          {sets === completedCount ? (
             <Button variant="outlined"sx={{width:'50%', transform:'scale(1)'}}>
               {name} Completed
             </Button>
@@ -119,7 +99,6 @@ export const ExerciseDetailsCard = ({ name, sets, reps, weight, status, onMarkSe
           )}
           </Grid>
           <Grid sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          
           <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#0c60f2' }}>
             Sets: {sets}
           </Typography>
@@ -130,9 +109,6 @@ export const ExerciseDetailsCard = ({ name, sets, reps, weight, status, onMarkSe
             Weight: {weight}
           </Typography>
           </Grid>
-          
-          
-          
         </CardContent>
       </Card>
     </Box>

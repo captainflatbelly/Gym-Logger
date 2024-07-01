@@ -275,3 +275,14 @@ export async function declineFriendRequest(data)
         console.log(error);
     }
 }
+
+export async function getUserId()
+{
+    try {
+        const response = await axios.get(`${BASE_URL}user/getUserId`);
+        return response.data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}

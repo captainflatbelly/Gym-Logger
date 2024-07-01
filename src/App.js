@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner'; // Import Toaster
 import { AuthProvider } from './context/AuthContext';
@@ -10,9 +10,18 @@ import Dashboard from './components/Dashboard'; // Adjust path if necessary
 import ErrorBoundary from './components/ErrorBoundary';
 import WorkoutDetail from './components/WorkoutDetail';
 import ExerciseInventory from './components/ExerciseInventory';
+import { setSocket, setUserId, addInvite, addSet } from './redux/slices/gymSlice';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store from './redux/store';
+import { io } from 'socket.io-client';
+import {socket} from './utils/socket';
+
+
 const App = () => {
   return (
+    <Provider store={store}>
     <AuthProvider>
+    
       <Router>
         <Toaster position="bottom-right" richColors /> {/* Add Toaster here */}
         <Routes>
@@ -44,7 +53,9 @@ const App = () => {
           <Route path="/*" element={<ErrorBoundary />} /> {/* Handle other routes or errors */}
         </Routes>
       </Router>
+      
     </AuthProvider>
+    </Provider>
   );
 };
 

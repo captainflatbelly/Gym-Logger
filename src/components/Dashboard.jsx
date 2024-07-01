@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   Box,
   AppBar,
@@ -56,6 +56,21 @@ const Dashboard = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useContext(AuthContext);
 
+  useEffect(() => {
+    // Listen for changes in hash and update selectedMenuItem accordingly
+    const handleHashChange = () => {
+      const section = window.location.hash.substring(1);
+      setSelectedMenuItem(section || '1'); // Default to Home if no section found
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    handleHashChange(); // Initial check on component mount
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -68,6 +83,8 @@ const Dashboard = () => {
       }, 1000);
     } else {
       setSelectedMenuItem(key);
+      // Update hash fragment to reflect selected section
+      window.location.hash = key;
       // Close the drawer on mobile when an item is selected
       setMobileOpen(false);
     }
@@ -86,17 +103,17 @@ const Dashboard = () => {
 
   const renderContent = () => {
     switch (selectedMenuItem) {
-      case '1':
+      case 'Home':
         return <HomeContent />;
-      case '2':
+      case 'Profile':
         return <Profile />;
-      case '3':
+      case 'WorkoutForm':
         return <ExerciseForm />;
-      case '4':
+      case 'Calendar':
         return <Calendar />;
-      case '5':
+      case 'Settings':
         return <Workouts />;
-      case '7':
+      case 'Friends':
         return <Friends />;
       default:
         return <HomeContent />;
@@ -107,13 +124,13 @@ const Dashboard = () => {
     <Box p={2} display="flex" justifyContent="center">
       <List>
         {[
-          { key: '1', icon: <HomeOutlined />, label: 'Home' },
-          { key: '2', icon: <UserOutlined />, label: 'Profile' },
-          { key: '3', icon: <LiaUserFriendsSolid />, label: 'Workout Form' },
-          { key: '7', icon: <LiaUserFriendsSolid />, label: 'Friends' },
-          { key: '4', icon: <CgGym />, label: 'Calendar' },
-          { key: '5', icon: <SettingOutlined />, label: 'Settings' },
-          { key: '6', icon: <LogoutOutlined />, label: 'Logout' },
+          { key: 'Home', icon: <HomeOutlined />, label: 'Home' },
+          { key: 'Profile', icon: <UserOutlined />, label: 'Profile' },
+          { key: 'WorkoutForm', icon: <LiaUserFriendsSolid />, label: 'Workout Form' },
+          { key: 'Friends', icon: <LiaUserFriendsSolid />, label: 'Friends' },
+          { key: 'Calendar', icon: <CgGym />, label: 'Calendar' },
+          { key: 'Settings', icon: <SettingOutlined />, label: 'Settings' },
+          { key: 'Logout', icon: <LogoutOutlined />, label: 'Logout' },
         ].map((item) => (
           <ListItem button key={item.key} onClick={() => handleMenuClick(item.key)}>
             <ListItemIcon sx={{ color: '#00df98' }}>{item.icon}</ListItemIcon>

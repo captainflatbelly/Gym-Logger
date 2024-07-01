@@ -1,12 +1,15 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { authVerify , userLogout} from '../utils/api';
+import { authVerify, userLogout,getUserId } from '../utils/api';
 import { useNavigate } from 'react-router-dom';
-export const AuthContext = createContext();
+import { useDispatch } from 'react-redux';
+import { setUserId } from '../redux/slices/gymSlice';
 
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch(); // Move useDispatch here
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -14,10 +17,14 @@ export const AuthProvider = ({ children }) => {
         console.log('Checking authentication...');
 
         const response = await authVerify(); // Verify authentication status
+        const response2 = await getUserId();
+        const userId = response2.data.userId;
+        console.log('User ID:', userId);
         console.log('Response from authVerify:', response.valid);
 
         if (response.valid === true) {
           console.log('Token is valid, setting isAuthenticated to true');
+          dispatch(setUserId(userId)); // Use dispatch directly within useEffect
           setIsAuthenticated(true);
         } else {
           console.log('Token is invalid, setting isAuthenticated to false');
@@ -34,11 +41,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     checkAuth();
-  }, []);
+  }, []); 
 
   const logout = () => {
     setIsAuthenticated(false); // Set authentication state to false
-    //deleteCookie('accessToken'); // Clear token from cookies or localStorage
     const response = userLogout();
     console.log('Logout response:', response);
     // Perform any other cleanup as necessary

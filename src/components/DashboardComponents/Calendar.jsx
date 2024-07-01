@@ -1,20 +1,16 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, theme } from 'antd';
+import { Calendar } from 'antd';
 import growth from '../../assets/undraw_growth_chart_r99m.svg';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import CalorieCard from './Card2';
 import { getWorkoutDates } from '../../utils/api';
+import GradientCircularProgress from '../LoadingPage.jsx';
 
-import GradientCircularProgress  from '../LoadingPage.jsx';
 const themeMUI = createTheme();
-
-
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -25,12 +21,11 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const WorkoutHistory = () => {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
-
   const [highlightedDates, setHighlightedDates] = useState(null); // State to hold fetched data
   const [loading, setLoading] = useState(true); // State to manage loading state
   const [error, setError] = useState(null);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     const fetchWorkoutDates = async () => {
@@ -49,7 +44,6 @@ const WorkoutHistory = () => {
           return acc;
         }, {});
         setHighlightedDates(Dates);
-        console.log(Dates);
         setLoading(false);
       } catch (error) {
         setError(error);
@@ -62,8 +56,8 @@ const WorkoutHistory = () => {
   const wrapperStyle = {
     maxWidth: '100%', // Full width to allow responsive design
     maxHeight: '400px', // Reduce the maximum height of the box
-    border: `1px solid ${token.colorBorderSecondary}`,
-    borderRadius: token.borderRadiusLG,
+    border: '1px solid black', // Replace with your border color or use token
+    borderRadius: '8px', // Replace with your border radius or use token
     overflow: 'auto', // Allow vertical scrolling if content exceeds maxHeight
     transform: 'scale(0.9)', // Scale down the content
   };
@@ -82,21 +76,33 @@ const WorkoutHistory = () => {
   };
 
   const onPanelChange = (value, mode) => {
+    // Check if this is the initial mount (first render) to avoid navigation on panel change
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     console.log(value, mode);
   };
 
   const handleDateSelect = (date) => {
-    const formattedDate = date.format('YYYY-MM-DD');
-    console.log('Selected date:', formattedDate);
-    navigate(`/workout/${formattedDate}`); // Navigate to correct URL
+    // Check if the date selection is from user interaction
+    if (!isInitialMount.current) {
+      // Check if the date is not the first date of the month
+      if (date.date() !== 4) {
+        const formattedDate = date.format('YYYY-MM-DD');
+        console.log('Selected date:', formattedDate);
+        navigate(`/workout/${formattedDate}`); // Navigate to correct URL
+      }
+    }
   };
 
-
-  if (loading) return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <GradientCircularProgress /> 
-    </div>
-  );
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <GradientCircularProgress />
+      </div>
+    );
+  }
 
   return (
     <ThemeProvider theme={themeMUI}>

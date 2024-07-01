@@ -137,7 +137,8 @@ const Friends = () => {
                         gap: 2,
                         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
                     }}
-                >
+                >   
+                {console.log(friends)}
                     {friends.map((friend) => (
                         <Box key={friend.id} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, color: "#000000", pb: 2, pt: 2, borderRadius: 4, width: "100%", backgroundColor: "white" }}>
                             <Typography sx={{ px: 3 }} variant="h6" fontWeight="bold" color="#000000">
