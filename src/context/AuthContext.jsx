@@ -17,14 +17,12 @@ export const AuthProvider = ({ children }) => {
         console.log('Checking authentication...');
 
         const response = await authVerify(); // Verify authentication status
-        const response2 = await getUserId();
-        const userId = response2.data.userId;
-        console.log('User ID:', userId);
-        console.log('Response from authVerify:', response.valid);
+       
+         console.log('Response from authVerify:', response);
 
         if (response.valid === true) {
           console.log('Token is valid, setting isAuthenticated to true');
-          dispatch(setUserId(userId)); // Use dispatch directly within useEffect
+
           setIsAuthenticated(true);
         } else {
           console.log('Token is invalid, setting isAuthenticated to false');

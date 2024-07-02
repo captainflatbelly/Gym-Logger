@@ -42,6 +42,14 @@ const LoginForm = () => {
         if (response && response.data.status === 'Inserted') {
           // Set authenticated state in context or local storage
           setIsAuthenticated(true);
+          const firstName = response.data.data.firstName;
+          const lastName = response.data.data.lastName;
+          const userId = response.data.data.userId;
+          console.log(userId)
+          localStorage.setItem('firstName', firstName);
+          localStorage.setItem('lastName', lastName);
+          localStorage.setItem('userId', userId);
+
           // Show success toast and redirect after delay
           toast.success('Login Successful! Redirecting to Dashboard...', {
             duration: 2000,

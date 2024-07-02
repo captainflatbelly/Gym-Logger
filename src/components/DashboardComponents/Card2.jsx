@@ -55,7 +55,7 @@ export const ExerciseCard = ({ name, sets, reps, weight, status }) => {
 export const ExerciseDetailsCard = ({ name, sets, reps, weight, status, onMarkSetComplete, workoutId, exerciseId, ExerciseName}) => {
   const [completedCount, setCompletedCount] = useState(0);
   const gymName = useSelector((state) => state.gym.gymName);
-  const userId = useSelector((state) => state.gym.userId);
+  const userId = localStorage.getItem('userId');
 
   const handleMarkSetComplete = async(e) => {
     e.preventDefault()

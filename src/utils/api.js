@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 export const authVerify = async () => { 
     try {
         const response = await axios.get(`${BASE_URL}auth/verify-token`);
+        console.log(response);
         return response.data;
     }
     catch (error) {

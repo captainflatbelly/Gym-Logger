@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+
 import Paper from '@mui/material/Paper';
+
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+
+
+import { Modal, Typography, Input,  Select, MenuItem } from 'antd';
 import LinearProgress from '@mui/material/LinearProgress';
 import { ExerciseDetailsCard } from './DashboardComponents/Card2'; // Assuming ExerciseDetailsCard is correctly imported
 import { fetchWorkoutById, fetchFriends } from '../utils/api'; // Assuming fetchWorkoutById function fetches workout data
@@ -29,7 +30,7 @@ import { create } from '@mui/material/styles/createTransitions';
 const ExerciseInventory = () => {
   
   const dispatch = useDispatch();
-  
+  const { Option } = Select;
 
   const navigate = useNavigate();
   const { date, id } = useParams();
@@ -41,13 +42,13 @@ const ExerciseInventory = () => {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [friends, setFriends] = useState([]);
   const [showInviteSnackbar, setShowInviteSnackbar] = useState(false);
-  const [inviteDetails, setInviteDetails] = useState({ gymName: '', friendId: '' });
+  const [inviteDetails, setInviteDetails] = useState({ gymName: '', friend: '' });
 
   // Socket event listener for 'invite'
-  socket.on('invite', ({ gymName, friendId }) => {
+  socket.on('invite', ({ gymName, friend }) => {
     dispatch(setGymName(gymName))
-    console.log(`Received invite for gym "${gymName}" from user ${friendId}`);
-    setInviteDetails({ gymName, friendId });
+    console.log(`Received invite for gym "${gymName}" from user ${friend.userName}`);
+    setInviteDetails({ gymName, friend: friend });
     setShowInviteSnackbar(true);
   });
   const fetchFriendsData = async () => {
@@ -63,11 +64,13 @@ const ExerciseInventory = () => {
         setLoading(false);
     }
 };
-const userId = useSelector((state) => state.gym.userId);
-
+const userId = localStorage.getItem('userId');
+const name = localStorage.getItem('firstName') + ' ' + localStorage.getItem('lastName')
+console.log(name)
+console.log(userId)
   useEffect(() => {
     
-    registerUser(userId);
+    registerUser(userId,name);
   }, []);
     
 
@@ -119,7 +122,8 @@ const userId = useSelector((state) => state.gym.userId);
   };
 
   const handleFriendSelectChange = (event) => {
-    setSelectedFriends(event.target.value);
+    setSelectedFriends(event);
+    console.log(selectedFriends)
   };
 
   if (loading) {
@@ -179,7 +183,7 @@ const userId = useSelector((state) => state.gym.userId);
             </Typography>
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               onClick={handleCreateGymRoom}
               sx={{ mt: 2, width: '100%', transform: 'scale(1.2)' }}
             >
@@ -210,63 +214,49 @@ const userId = useSelector((state) => state.gym.userId);
 
       {/* Modal for creating gym room */}
       <Modal
-        open={showModal}
-        onClose={handleModalClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+      open={showModal}
+      onCancel={handleModalClose}
+      title="Create Gym Room"
+      footer={[
+        <Button key="back" onClick={handleModalClose}>
+          Cancel
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleCreateRoomSubmit}>
+          Create Room
+        </Button>,
+      ]}
+    >
+      <Typography.Title level={5}>Gym Name</Typography.Title>
+      <Input
+        fullWidth
+        label="Gym Name"
+        variant="outlined"
+        value={dummyGymName}
+        onChange={(e) => setDummyGymName(e.target.value)}
+        style={{ marginBottom: '16px', width: '100%' }}
+      />
+
+      <Typography.Title level={5}>Select Friends</Typography.Title>
+      <Select
+        mode="multiple"
+        style={{ width: '100%' }}
+        value={selectedFriends}
+        onChange={handleFriendSelectChange}
+        placeholder="Select friends"
       >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-          width: 400,
-          borderRadius: '20px',
-        }}>
-          <Typography variant="h6" gutterBottom>
-            Create Gym Room
-          </Typography>
-          <TextField
-            fullWidth
-            label="Gym Name"
-            variant="outlined"
-            margin="normal"
-            value={dummyGymName}
-            onChange={(e) => setDummyGymName(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            select
-            label="Select Friends"
-            variant="outlined"
-            margin="normal"
-            value={selectedFriends}
-            onChange={handleFriendSelectChange}
-            SelectProps={{
-              multiple: true,
-              renderValue: (selected) => selected.map(id => {
-                const friend = friends.find(friend => friend.id === id);
-                return `${friend.firstName} ${friend.lastName}`;
-              }).join(', '),
-            }}
-          >
-            {friends.map((friend) => (
-              <MenuItem key={friend.id} value={friend.id}>
-                {friend.firstName} {friend.lastName}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Button variant="contained" onClick={handleCreateRoomSubmit} sx={{ mt: 2, width: '100%' }}>
-            Create Room
-          </Button>
-        </Box>
-      </Modal>
+        {friends.map((friend) => (
+          
+          <Option key={friend.id} value={friend.id}>
+            {`${friend.firstName} ${friend.lastName}`}
+            
+          </Option>
+          //console.log(friend.id)
+        ))}
+      </Select>
+    </Modal>
       <Box>
       {showInviteSnackbar && (
-        <AcceptDeclineSnackbar gymName={inviteDetails.gymName} friendId={inviteDetails.friendId} />
+        <AcceptDeclineSnackbar gymName={inviteDetails.gymName} friend={inviteDetails.friend} />
       )}
       </Box>
     </Box>

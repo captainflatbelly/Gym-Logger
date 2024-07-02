@@ -1,15 +1,25 @@
 import { io } from 'socket.io-client';
 import * as React from 'react';
-import Button from '@mui/material/Button';
+
 import Stack from '@mui/material/Stack';
 import SnackbarContent from '@mui/material/SnackbarContent';
 import { toast } from 'sonner';
-// Initialize socket connection
+
+import { useState } from 'react';
+import { Button, Modal } from 'antd';
+import { set } from 'date-fns';
+
+ 
+    
+ 
+
+
+
 const socket = io('http://localhost:4000'); // Replace with your server URL
 
 
-const registerUser = (userId) => {
-  socket.emit('register', userId);
+const registerUser = (userId, userName) => {
+  socket.emit('register', userId, userName);
 };
 
 
@@ -43,9 +53,9 @@ const completeSet = (gymName, userId, ExerciseName) => {
 // });
 
 // Listen for 'user-joined' event
-socket.on('user-joined', ({ userId }) => {
-    console.log(`User ${userId} joined the gym`);
-    toast(`User ${userId} joined the gym`)
+socket.on('user-joined', ({ user }) => {
+    console.log(`User ${user.userName} joined the gym`);
+    toast(`User ${user.userName} joined the gym`)
 });
   
 //  // Listen for 'invite-rejected' event
@@ -55,9 +65,9 @@ socket.on('user-joined', ({ userId }) => {
 //   });
   
   // Listen for 'set-completed' event
-  socket.on('set-completed', ({ gymName, userId, ExerciseName }) => {
-    console.log(`User ${userId} completed a set:, setDetails`);
-    toast(`User ${userId} completed a set of ${ExerciseName} in the gym ${gymName}`);
+  socket.on('set-completed', ({ gymName, user, ExerciseName }) => {
+    console.log(`User ${user.userName} completed a set:, setDetails`);
+    toast(`User ${user.userName} completed a set of ${ExerciseName} in the gym ${gymName}`);
   });
   
   // Handle disconnection
@@ -67,31 +77,61 @@ socket.on('user-joined', ({ userId }) => {
   });
 
 // Component for SnackbarContent with Accept and Decline buttons
-const AcceptDeclineSnackbar = ({ gymName, friendId }) => {
+const AcceptDeclineSnackbar = ({ gymName, friend }) => {
+        
+    const [loading, setLoading] = useState(false);
+    const friendId = friend.userId
+    const friendName = friend.userName
+    const [open, setOpen] = useState(false);
+    const [visitButton, setVisitButton] = useState(true);
+    const showModal = () => {
+    setOpen(true);
+    setVisitButton(false);
+    };
+
+
     const handleAccept = () => {
       console.log('Accepted invite');
-      joinGym(gymName, friendId); 
+      setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+      joinGym(gymName, localStorage.getItem('userId')); 
     };
   
     const handleDecline = () => {
       console.log('Declined invite');
+      setOpen(false);
       rejectInvite(gymName, friendId); 
     };
   
     return (
-      <SnackbarContent
-        message={`Received invite for gym ${gymName} from user ${friendId}`}
-        action={
-          <Stack direction="row" spacing={2}>
-            <Button color="secondary" size="small" onClick={handleDecline}>
+        <>
+        {!visitButton? null : (
+        <Button type="primary" onClick={showModal}>
+          Invite to a Virtual Workout
+        </Button>
+      )}
+       
+        <Modal
+          visible={open}
+          title="Title"
+          onOk={handleAccept}
+          onCancel={handleDecline}
+          footer={[
+            <Button key="back" onClick={handleDecline}>
               Decline
-            </Button>
-            <Button color="primary" size="small" onClick={handleAccept}>
+            </Button>,
+            <Button key="submit" type="primary" loading={loading} onClick={handleAccept}>
               Accept
-            </Button>
-          </Stack>
-        }
-      />
+            </Button>,
+          ]}
+        >
+          <p>{`Received invite for gym ${gymName} from user ${friendName}`}</p>
+         
+        </Modal>
+      </>
     );
   };
 
