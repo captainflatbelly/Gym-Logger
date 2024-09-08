@@ -10,6 +10,7 @@ import Dashboard from './components/Dashboard'; // Adjust path if necessary
 import ErrorBoundary from './components/ErrorBoundary';
 import WorkoutDetail from './components/WorkoutDetail';
 import ExerciseInventory from './components/ExerciseInventory';
+import ForgotPassword from './components/ForgotPassword';
 import { setSocket, setUserId, addInvite, addSet } from './redux/slices/gymSlice';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store from './redux/store';
@@ -32,6 +33,7 @@ const App = () => {
           } />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          {/* <Route path="/forgotpassword" element={<ForgotPassword />} /> */}
           <Route
             path="/dashboard"
             element={

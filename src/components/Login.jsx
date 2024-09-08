@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { loginUser } from '../utils/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import Navbar from './LandingPageComponents/Navbar';
 import { Toaster, toast } from 'sonner';
 
@@ -19,6 +20,9 @@ const LoginForm = () => {
     password: false,
   });
 
+  const forgotPasswordRoute = () => {
+    navigate('/forgotpassword');
+  }
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -156,6 +160,11 @@ const LoginForm = () => {
                 required
               />
               {formErrors.password && <p className="text-red-500 text-xs mt-1">Password must be at least 5 characters long</p>}
+            </div>
+            <div>   
+              <button onClick={forgotPasswordRoute} className="text-blue-400 hover:underline">
+                Forgot Password
+              </button>
             </div>
             <button
               type="submit"

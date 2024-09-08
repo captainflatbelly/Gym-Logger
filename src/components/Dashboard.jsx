@@ -16,15 +16,12 @@ import {
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  HomeOutlined,
   UserOutlined,
-  SettingOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
 import { AuthContext } from '../context/AuthContext';
 import { toast } from 'sonner';
 import { createWorkout } from '../utils/api';
-import HomeContent from './DashboardComponents/HomeContent';
 import Profile from './DashboardComponents/Profile';
 import ExerciseForm from './DashboardComponents/ExerciseForm';
 import Calendar from './DashboardComponents/Calendar';
@@ -52,15 +49,14 @@ const theme = createTheme({
 const drawerWidth = 240;
 
 const Dashboard = () => {
-  const [selectedMenuItem, setSelectedMenuItem] = useState('1');
+  const [selectedMenuItem, setSelectedMenuItem] = useState('WorkoutForm'); // Default to WorkoutForm
   const [mobileOpen, setMobileOpen] = useState(false);
   const { logout } = useContext(AuthContext);
 
   useEffect(() => {
-    // Listen for changes in hash and update selectedMenuItem accordingly
     const handleHashChange = () => {
       const section = window.location.hash.substring(1);
-      setSelectedMenuItem(section || '1'); // Default to Home if no section found
+      setSelectedMenuItem(section || 'WorkoutForm'); // Default to WorkoutForm if no section found
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -76,16 +72,14 @@ const Dashboard = () => {
   };
 
   const handleMenuClick = (key) => {
-    if (key === '6') {
+    if (key === 'Logout') {
       toast.success('Logout Successful');
       setTimeout(() => {
         logout();
       }, 1000);
     } else {
       setSelectedMenuItem(key);
-      // Update hash fragment to reflect selected section
       window.location.hash = key;
-      // Close the drawer on mobile when an item is selected
       setMobileOpen(false);
     }
   };
@@ -94,29 +88,23 @@ const Dashboard = () => {
     try {
       const response = await createWorkout(exercises);
       console.log('Workout created successfully:', response.data);
-      // Optionally, display a toast notification or update UI to reflect success
     } catch (error) {
       console.error('Error creating workout:', error);
-      // Handle error (e.g., display toast notification or update UI)
     }
   };
 
   const renderContent = () => {
     switch (selectedMenuItem) {
-      case 'Home':
-        return <HomeContent />;
       case 'Profile':
         return <Profile />;
       case 'WorkoutForm':
         return <ExerciseForm />;
       case 'Calendar':
         return <Calendar />;
-      case 'Settings':
-        return <Workouts />;
       case 'Friends':
         return <Friends />;
       default:
-        return <HomeContent />;
+        return <ExerciseForm />; // Default content
     }
   };
 
@@ -124,12 +112,10 @@ const Dashboard = () => {
     <Box p={2} display="flex" justifyContent="center">
       <List>
         {[
-          { key: 'Home', icon: <HomeOutlined />, label: 'Home' },
           { key: 'Profile', icon: <UserOutlined />, label: 'Profile' },
           { key: 'WorkoutForm', icon: <LiaUserFriendsSolid />, label: 'Workout Form' },
           { key: 'Friends', icon: <LiaUserFriendsSolid />, label: 'Friends' },
           { key: 'Calendar', icon: <CgGym />, label: 'Calendar' },
-          { key: 'Settings', icon: <SettingOutlined />, label: 'Settings' },
           { key: 'Logout', icon: <LogoutOutlined />, label: 'Logout' },
         ].map((item) => (
           <ListItem button key={item.key} onClick={() => handleMenuClick(item.key)}>
@@ -171,7 +157,6 @@ const Dashboard = () => {
           component="nav"
           sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 }}}
           aria-label="mailbox folders"
-          
         >
           <Drawer
             variant="temporary"

@@ -86,14 +86,14 @@ const WorkoutHistory = () => {
 
   const handleDateSelect = (date) => {
     // Check if the date selection is from user interaction
-    if (!isInitialMount.current) {
+   // if (!isInitialMount.current) {
       // Check if the date is not the first date of the month
-      if (date.date() !== 4) {
+      // if (date.date() !== 4) {
         const formattedDate = date.format('YYYY-MM-DD');
         console.log('Selected date:', formattedDate);
         navigate(`/workout/${formattedDate}`); // Navigate to correct URL
-      }
-    }
+     // }
+   // }
   };
 
   if (loading) {
